@@ -1,13 +1,13 @@
 """Tests for reporter module."""
 
 import os
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 import pytest
 
-from reportit.reporter import Reporter
-from reportit.config import Config
 from reportit.bridges import create_bridges
+from reportit.config import Config
+from reportit.reporter import Reporter
 
 
 class TestReporter:

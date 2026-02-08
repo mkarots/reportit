@@ -3,12 +3,10 @@
 import json
 import os
 import tempfile
-from unittest.mock import patch, MagicMock, Mock
+from unittest.mock import MagicMock, patch
 from urllib.error import URLError
 
-import pytest
-
-from reportit.bridges import Bridge, FileBridge, HTTPBridge, create_bridges
+from reportit.bridges import FileBridge, HTTPBridge, create_bridges
 from reportit.utils import create_exception_payload
 
 
@@ -19,7 +17,7 @@ class TestFileBridge:
         """Test that FileBridge creates directory if it doesn't exist."""
         with tempfile.TemporaryDirectory() as tmpdir:
             log_file = os.path.join(tmpdir, "subdir", "exceptions.log")
-            bridge = FileBridge(log_file=log_file)
+            _ = FileBridge(log_file=log_file)
             assert os.path.exists(os.path.dirname(log_file))
 
     def test_file_bridge_writes_payload(self):
@@ -34,7 +32,7 @@ class TestFileBridge:
             bridge.send(payload)
 
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert "test error" in content
                 assert "ValueError" in content
@@ -45,17 +43,13 @@ class TestFileBridge:
             log_file = os.path.join(tmpdir, "exceptions.log")
             bridge = FileBridge(log_file=log_file)
 
-            payload1 = create_exception_payload(
-                ValueError, ValueError("error 1"), None
-            )
-            payload2 = create_exception_payload(
-                TypeError, TypeError("error 2"), None
-            )
+            payload1 = create_exception_payload(ValueError, ValueError("error 1"), None)
+            payload2 = create_exception_payload(TypeError, TypeError("error 2"), None)
 
             bridge.send(payload1)
             bridge.send(payload2)
 
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert content.count("Exception Report") == 2
                 assert "error 1" in content
@@ -66,9 +60,7 @@ class TestFileBridge:
         # Use a path that will cause permission error (on Unix)
         if os.name == "posix":
             bridge = FileBridge(log_file="/root/cannot_write.log")
-            payload = create_exception_payload(
-                ValueError, ValueError("test"), None
-            )
+            payload = create_exception_payload(ValueError, ValueError("test"), None)
             # Should not raise exception
             bridge.send(payload)
 
@@ -84,9 +76,7 @@ class TestHTTPBridge:
         mock_urlopen.return_value.__enter__.return_value = mock_response
 
         bridge = HTTPBridge(endpoint="http://localhost:7331/exception")
-        payload = create_exception_payload(
-            ValueError, ValueError("test error"), None
-        )
+        payload = create_exception_payload(ValueError, ValueError("test error"), None)
         bridge.send(payload)
 
         assert mock_urlopen.called
@@ -104,9 +94,7 @@ class TestHTTPBridge:
         mock_urlopen.return_value.__enter__.return_value = mock_response
 
         bridge = HTTPBridge()
-        payload = create_exception_payload(
-            ValueError, ValueError("test error"), None
-        )
+        payload = create_exception_payload(ValueError, ValueError("test error"), None)
         bridge.send(payload)
 
         call_args = mock_urlopen.call_args
@@ -123,9 +111,7 @@ class TestHTTPBridge:
         mock_urlopen.side_effect = URLError("Connection refused")
 
         bridge = HTTPBridge()
-        payload = create_exception_payload(
-            ValueError, ValueError("test"), None
-        )
+        payload = create_exception_payload(ValueError, ValueError("test"), None)
         # Should not raise exception
         bridge.send(payload)
 
@@ -137,9 +123,7 @@ class TestHTTPBridge:
         mock_urlopen.return_value.__enter__.return_value = mock_response
 
         bridge = HTTPBridge()
-        payload = create_exception_payload(
-            ValueError, ValueError("test"), None
-        )
+        payload = create_exception_payload(ValueError, ValueError("test"), None)
         bridge.send(payload)
 
         call_kwargs = mock_urlopen.call_args[1]

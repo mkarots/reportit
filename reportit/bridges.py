@@ -1,11 +1,10 @@
 """Bridge implementations for exception reporting output."""
 
-import json
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
-from urllib.request import Request, urlopen
+from typing import Any, Dict, Optional
 from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 from reportit.utils import format_payload_as_json, format_payload_as_text
 
@@ -57,7 +56,7 @@ class FileBridge(Bridge):
             text_output = format_payload_as_text(payload)
             with open(self.log_file, "a", encoding="utf-8") as f:
                 f.write(text_output)
-        except (OSError, IOError) as e:
+        except OSError:
             # Silently fail to avoid interfering with application
             # In production, you might want to log this to stderr
             pass
@@ -95,14 +94,16 @@ class HTTPBridge(Bridge):
             with urlopen(request, timeout=1.0) as response:
                 # Response is read but not used
                 _ = response.read()
-        except (URLError, OSError, ValueError) as e:
+        except (URLError, OSError, ValueError):
             # Silently fail to avoid interfering with application
             # In production, you might want to log this to stderr
             pass
 
 
 def create_bridges(
-    bridge_type: str, http_endpoint: Optional[str] = None, log_file: Optional[str] = None
+    bridge_type: str,
+    http_endpoint: Optional[str] = None,
+    log_file: Optional[str] = None,
 ) -> list[Bridge]:
     """
     Create bridge instances based on bridge type.
@@ -122,7 +123,9 @@ def create_bridges(
         bridges.append(file_bridge)
 
     if bridge_type in ("http", "both"):
-        http_bridge = HTTPBridge(endpoint=http_endpoint or "http://localhost:7331/exception")
+        http_bridge = HTTPBridge(
+            endpoint=http_endpoint or "http://localhost:7331/exception"
+        )
         bridges.append(http_bridge)
 
     return bridges

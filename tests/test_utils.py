@@ -4,14 +4,12 @@ import json
 import threading
 from datetime import datetime
 
-import pytest
-
 from reportit.utils import (
-    format_exception,
-    get_thread_info,
     create_exception_payload,
+    format_exception,
     format_payload_as_json,
     format_payload_as_text,
+    get_thread_info,
 )
 
 

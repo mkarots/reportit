@@ -1,7 +1,6 @@
 """Tests for config module."""
 
 import os
-import pytest
 from unittest.mock import patch
 
 from reportit.config import Config, get_default_config

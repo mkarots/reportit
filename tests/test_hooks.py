@@ -2,14 +2,12 @@
 
 import sys
 import threading
-from unittest.mock import Mock, patch
-
-import pytest
+from unittest.mock import Mock
 
 from reportit.hooks import (
     install_hooks,
-    uninstall_hooks,
     is_hooks_installed,
+    uninstall_hooks,
 )
 from reportit.reporter import Reporter
 

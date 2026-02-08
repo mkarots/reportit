@@ -1,9 +1,9 @@
 """Core Reporter class for exception reporting."""
 
-from typing import Optional, Type, Any, List
+from typing import Any, List, Optional, Type
 
 from reportit.bridges import Bridge
-from reportit.config import Config, BridgeType
+from reportit.config import BridgeType, Config
 from reportit.utils import create_exception_payload
 
 

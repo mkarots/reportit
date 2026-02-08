@@ -1,7 +1,6 @@
 """Utility functions for exception formatting and thread information."""
 
 import json
-import sys
 import threading
 import traceback
 from datetime import datetime

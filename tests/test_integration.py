@@ -7,9 +7,7 @@ import threading
 import time
 from unittest.mock import patch
 
-import pytest
-
-from reportit import enable, disable, Reporter
+from reportit import Reporter, disable, enable
 from reportit.hooks import is_hooks_installed
 
 
@@ -36,7 +34,7 @@ class TestIntegration:
 
             # Verify exception was logged
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert "integration test error" in content
                 assert "ValueError" in content
@@ -70,7 +68,7 @@ class TestIntegration:
 
             # Verify exception was logged
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert "thread exception" in content
                 assert "RuntimeError" in content
@@ -108,7 +106,7 @@ class TestIntegration:
 
             # Verify exception was logged
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert "uncaught exception" in content
                 assert "KeyError" in content
@@ -136,7 +134,7 @@ class TestIntegration:
 
             # Verify all exceptions were logged
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert content.count("Exception Report") == 3
                 assert "exception 0" in content
@@ -175,7 +173,7 @@ class TestIntegration:
 
             # Verify only first exception was logged
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert "before disable" in content
                 assert "after disable" not in content
@@ -186,8 +184,10 @@ class TestIntegration:
             log_file = os.path.join(tmpdir, "exceptions.log")
 
             from reportit.bridges import create_bridges
+
             bridges = create_bridges("file", log_file=log_file)
             from reportit.config import Config
+
             config = Config(enabled=True)
             reporter = Reporter(bridges=bridges, config=config)
             reporter.enable()
@@ -202,7 +202,7 @@ class TestIntegration:
 
             # Verify exception was logged
             assert os.path.exists(log_file)
-            with open(log_file, "r") as f:
+            with open(log_file) as f:
                 content = f.read()
                 assert "manual report" in content
 
@@ -226,7 +226,7 @@ class TestIntegration:
 
                 # Verify exception was logged
                 assert os.path.exists(log_file)
-                with open(log_file, "r") as f:
+                with open(log_file) as f:
                     content = f.read()
                     assert "env var test" in content
 

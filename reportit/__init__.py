@@ -1,17 +1,17 @@
 """Exception reporting library for Cursor IDE integration."""
 
-from typing import Optional, Any, Type
 from pathlib import Path
+from typing import Any, Optional, Type
 
-from reportit.config import Config, BridgeType
-from reportit.reporter import Reporter
 from reportit.bridges import create_bridges
-from reportit.hooks import install_hooks, uninstall_hooks, is_hooks_installed
+from reportit.config import BridgeType, Config
+from reportit.hooks import install_hooks, is_hooks_installed, uninstall_hooks
+from reportit.reporter import Reporter
 
 # Read version from package metadata or pyproject.toml
 _DEFAULT_VERSION = "0.1.0"
 try:
-    from importlib.metadata import version, PackageNotFoundError
+    from importlib.metadata import PackageNotFoundError, version
 
     try:
         __version__ = version("reportit")

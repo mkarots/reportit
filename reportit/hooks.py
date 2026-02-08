@@ -2,10 +2,9 @@
 
 import sys
 import threading
-from typing import Optional, Type, Any
+from typing import Any, Optional, Type
 
 from reportit.reporter import Reporter
-
 
 # Global state for hook management
 _original_excepthook: Optional[Any] = None
