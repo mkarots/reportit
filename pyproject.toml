@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel", "build>=0.10.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -32,6 +32,7 @@ dev = [
     "pytest-mock>=3.10.0",
     "ruff>=0.1.0",
     "black>=23.0.0",
+    "tomli>=2.0.0; python_version < '3.11'",  # For reading pyproject.toml in Python < 3.11
 ]
 
 [tool.pytest.ini_options]

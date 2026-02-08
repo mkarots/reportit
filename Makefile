@@ -5,10 +5,10 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-15s %s\n", $$1, $$2}'
 
 install: ## Install package in production mode
-	pip install -e .
+	uv pip install -e .
 
 install-dev: ## Install package with dev dependencies
-	pip install -e ".[dev]"
+	uv pip install -e ".[dev]"
 
 test: ## Run tests with pytest
 	pytest
@@ -42,6 +42,6 @@ clean: ## Clean build artifacts and cache
 	find . -type f -name "*.pyc" -delete
 
 build: clean ## Build distribution packages
-	python -m build
+	uv build
 
 all: clean install-dev lint format-check test ## Run all checks and tests

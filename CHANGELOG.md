@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Makefile for project management tasks
 - Ruff and Black configuration in pyproject.toml
 - Project badges in README.md
+- GitHub Actions workflows for CI/CD (test, lint, build, release)
+- Migrated to uv for package management (workflows, Makefile, README)
+- Automatic version synchronization: __version__ in __init__.py reads from pyproject.toml
 
 ### Features
 

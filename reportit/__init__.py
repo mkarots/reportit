@@ -1,13 +1,49 @@
 """Exception reporting library for Cursor IDE integration."""
 
 from typing import Optional, Any, Type
+from pathlib import Path
 
 from reportit.config import Config, BridgeType
 from reportit.reporter import Reporter
 from reportit.bridges import create_bridges
 from reportit.hooks import install_hooks, uninstall_hooks, is_hooks_installed
 
-__version__ = "0.1.0"
+# Read version from package metadata or pyproject.toml
+_DEFAULT_VERSION = "0.1.0"
+try:
+    from importlib.metadata import version, PackageNotFoundError
+
+    try:
+        __version__ = version("reportit")
+    except PackageNotFoundError:
+        # Package not installed, read from pyproject.toml
+        _pyproject_path = Path(__file__).parent.parent / "pyproject.toml"
+        if _pyproject_path.exists():
+            try:
+                # Python 3.11+ has tomllib in stdlib
+                import tomllib
+
+                with open(_pyproject_path, "rb") as f:
+                    _pyproject = tomllib.load(f)
+                    __version__ = _pyproject["project"]["version"]
+            except ImportError:
+                # Python < 3.11, try tomli (optional dev dependency)
+                try:
+                    import tomli as tomllib  # type: ignore[import-untyped]
+
+                    with open(_pyproject_path, "rb") as f:
+                        _pyproject = tomllib.load(f)
+                        __version__ = _pyproject["project"]["version"]
+                except ImportError:
+                    # Fallback if tomli not available
+                    __version__ = _DEFAULT_VERSION
+            except (KeyError, FileNotFoundError):
+                __version__ = _DEFAULT_VERSION
+        else:
+            __version__ = _DEFAULT_VERSION
+except ImportError:
+    # Python < 3.8 (shouldn't happen given requires-python >= 3.8)
+    __version__ = _DEFAULT_VERSION
 
 # Global reporter instance for convenience functions
 _global_reporter: Optional[Reporter] = None

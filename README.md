@@ -22,12 +22,18 @@ Exception reporting library for Cursor IDE integration. Intercepts uncaught exce
 pip install reportit
 ```
 
-Or install from source:
+Or install from source using uv:
 
 ```bash
 git clone <repository-url>
 cd reportit
-pip install -e .
+uv pip install -e .
+```
+
+Or with dev dependencies:
+
+```bash
+uv pip install -e ".[dev]"
 ```
 
 ## Quick Start
@@ -297,7 +303,7 @@ pytest --cov=reportit --cov-report=html
 ```bash
 git clone <repository-url>
 cd reportit
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 ```
 
 ### Running Tests
