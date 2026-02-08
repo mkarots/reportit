@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integration tests
 - Documentation (README.md and DESIGN.md)
 - Root composition pattern implementation (bridges created at root level)
+- Makefile for project management tasks
+- Ruff and Black configuration in pyproject.toml
+- Project badges in README.md
 
 ### Features
 
@@ -39,3 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Root composition: concrete classes instantiated only at root (`enable()` function)
 - Dependency injection: Reporter accepts bridges via constructor
 - Abstract Bridge interface enables extensibility
+
+### Development
+
+- Makefile with common tasks (test, lint, format, install, build)
+- Ruff linting configuration
+- Black code formatting configuration
+- Pytest with coverage reporting

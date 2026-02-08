@@ -178,57 +178,14 @@ No unstated assumptions
 - Use ruff and black 
 </PYTHON>
 <devops>
-- Use makefile for project management
-- Use github actions
-- Use docker builds where possible with slim images
+- Use Makefile for common project tasks (test, lint, format, install, etc.)
+- Use GitHub Actions for CI/CD workflows (test on multiple Python versions)
+- Use Docker builds where applicable with slim images
+- Include .github/workflows/ directory with CI configuration
 </devops>
 <VERSIONBUMP>
-After every change update @pyproject.toml and CHANGELOG.md
+After every change update @pyproject.toml version and CHANGELOG.md
+- Update version in pyproject.toml [project] section
+- Add entry to CHANGELOG.md following Keep a Changelog format
+- Use semantic versioning (MAJOR.MINOR.PATCH)
 </VERSIONBUMP>
-
-<EXCEPTION_REPORTING_PATTERNS>
-When implementing exception reporting or interception libraries:
-
-1. Hook Management
-   - Always preserve original hooks (sys.excepthook, threading.excepthook)
-   - Store original hooks before replacing
-   - Call original hooks after custom handling
-   - Provide enable/disable functionality to restore original state
-
-2. Root Composition for Exception Handlers
-   - Create concrete bridge/output classes at root level (in enable() or main entry point)
-   - Inject bridges into reporter via constructor (dependency injection)
-   - Reporter should depend on Bridge abstraction, not concrete classes
-   - This enables easy testing and extensibility
-
-3. Non-Intrusive Design
-   - Exception reporting failures must never propagate to application
-   - Use try/except around all bridge.send() calls
-   - Fail silently to avoid interfering with application behavior
-   - Preserve original exception output (still print to stderr)
-
-4. Thread Safety
-   - Handle exceptions from background threads via threading.excepthook
-   - Include thread information (name, ID, is_main_thread) in reports
-   - Ensure hook handlers are thread-safe (no shared mutable state)
-
-5. Configuration Pattern
-   - Support environment variable detection for dev-only features
-   - Provide explicit configuration override capability
-   - Default to safe/production-friendly settings
-   - Use Config class to centralize configuration logic
-
-6. Bridge Pattern Implementation
-   - Abstract Bridge base class with send() method
-   - Concrete implementations (FileBridge, HTTPBridge)
-   - Factory function (create_bridges) at root level
-   - Bridges handle their own failures silently
-
-7. Testing Exception Handlers
-   - Mock bridges for unit tests
-   - Test hook installation/uninstallation
-   - Verify original hooks are preserved
-   - Test thread exception handling separately
-   - Use temporary directories for file bridge tests
-   - Mock HTTP requests for HTTP bridge tests
-</EXCEPTION_REPORTING_PATTERNS>
